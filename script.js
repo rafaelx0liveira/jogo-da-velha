@@ -1,6 +1,33 @@
 const cellElements = document.querySelectorAll('[data-cell]');
 const board = document.querySelector('[data-board]');
+const winningMessageTextElement = document.querySelector('[data-winning-message-text]');
+const winningMessageElement = document.querySelector('[data-winning-message]');
 let isCircleTurn;
+const winningCombinations = [
+  /* Primeira linha */
+  [0, 1, 2],
+
+  /* Segunda linha */
+  [3, 4, 5],
+  
+  /* Terceira linha */
+  [6, 7, 8],
+  
+  /* Primeira coluna */
+  [0, 3, 6],
+  
+  /* Segunda coluna */
+  [1, 4, 7],
+  
+  /* Terceira coluna */
+  [2, 5, 8],
+  
+  /* Diagonal principal */
+  [0, 4, 8],
+  
+  /* Diagonal secundária */
+  [2, 4, 6]
+];
 
 const startGame = () => {
   for(const cell of cellElements){
@@ -10,8 +37,29 @@ const startGame = () => {
   isCircleTurn = false;
 
   board.classList.add('x');
-
 }
+
+const endGame = (isDraw) => {
+  if(isDraw){
+    winningMessageTextElement.innerText = 'Draw!';
+  } else {
+    winningMessageTextElement.innerText = isCircleTurn 
+    ? 'O Venceu!' 
+    : 'X Venceu!';
+  }
+
+  winningMessageElement.classList.add('show-winning-message');
+}
+
+const checkWin = (currentPlayer) => {
+  /* Percorre todas as combinações de vitória */
+  return winningCombinations.some((combination) => {
+    /* Verifica se em cada index da combinação da lista contém a marca do jogador atual */
+    return combination.every(index => {
+      return cellElements[index].classList.contains(currentPlayer);
+    });
+  });
+};
 
 const placeMark = (cell, classToAdd) => {
   cell.classList.add(classToAdd);
@@ -40,6 +88,10 @@ const handleClick = (e) => {
   placeMark(cell, classToAdd);
 
   // Verificar vitória
+  const isWin = checkWin(classToAdd);
+  if(isWin){
+    endGame(false);
+  }
 
   // Verificar empate
 

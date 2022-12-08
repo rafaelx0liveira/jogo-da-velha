@@ -137,7 +137,7 @@ body {
 /* Mensagem de vitória*/
 
 .winning-message{
-  display: flex;
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -147,8 +147,6 @@ body {
   align-items: center;
   background-color: rgba(0, 0, 0, 0.8);
   flex-direction: column;
-  
-  display: none;
 }
 
 .winning-message-button{
@@ -170,4 +168,8 @@ body {
 .winning-message-text{
   font-size: 5rem;
   color: #fff;
+}
+
+.show-winning-message{
+  display: flex;
 }
