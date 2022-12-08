@@ -47,7 +47,7 @@ const startGame = () => {
 
 const endGame = (isDraw) => {
   if(isDraw){
-    winningMessageTextElement.innerText = 'Draw!';
+    winningMessageTextElement.innerText = 'Empate!';
   } else {
     winningMessageTextElement.innerText = isCircleTurn 
     ? 'O Venceu!' 
@@ -67,6 +67,15 @@ const checkWin = (currentPlayer) => {
     });
   });
 };
+
+checkDraw = () => {
+  
+  return [...cellElements].every(cell => {
+    
+    /* Irá retornar se todas as células contém x ou circle */
+    return cell.classList.contains('x') || cell.classList.contains('circle');
+  });
+}
 
 const placeMark = (cell, classToAdd) => {
   cell.classList.add(classToAdd);
@@ -98,17 +107,21 @@ const handleClick = (e) => {
   const classToAdd = isCircleTurn ? 'circle' : 'x';
 
   placeMark(cell, classToAdd);
-
-  // Verificar vitória
+  
+  const isDraw = checkDraw();
+  
   const isWin = checkWin(classToAdd);
   if(isWin){
+    // Verificar vitória
     endGame(false);
+  } else if (isDraw) {
+    // Verificar empate
+    endGame(true);
+  } else{
+    // Trocar jogador
+    swipTurn();
   }
 
-  // Verificar empate
-
-  // Trocar jogador
-  swipTurn();
 }
 
 startGame();
