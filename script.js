@@ -2,6 +2,7 @@ const cellElements = document.querySelectorAll('[data-cell]');
 const board = document.querySelector('[data-board]');
 const winningMessageTextElement = document.querySelector('[data-winning-message-text]');
 const winningMessageElement = document.querySelector('[data-winning-message]');
+const restartButton = document.querySelector('[data-restart-button]');
 let isCircleTurn;
 const winningCombinations = [
   /* Primeira linha */
@@ -30,13 +31,18 @@ const winningCombinations = [
 ];
 
 const startGame = () => {
+  isCircleTurn = false;
+  
   for(const cell of cellElements){
+    cell.classList.remove('x');
+    cell.classList.remove('circle');
+    cell.removeEventListener('click', handleClick);
     cell.addEventListener('click', handleClick, {once: true});
   }
 
-  isCircleTurn = false;
 
-  board.classList.add('x');
+  setBoardHoverClass();
+  winningMessageElement.classList.remove('show-winning-message');
 }
 
 const endGame = (isDraw) => {
@@ -50,6 +56,7 @@ const endGame = (isDraw) => {
 
   winningMessageElement.classList.add('show-winning-message');
 }
+
 
 const checkWin = (currentPlayer) => {
   /* Percorre todas as combinações de vitória */
@@ -65,10 +72,7 @@ const placeMark = (cell, classToAdd) => {
   cell.classList.add(classToAdd);
 }
 
-const swipTurn = () => {
-  /* isCircleTurn recebe o inverso que ele tinha */
-  isCircleTurn = !isCircleTurn;
-
+const setBoardHoverClass = () => {
   /* Pra não ser adicionado várias vezes as classes x ou o, vamos removê-las na mudança de turno */
   board.classList.remove('x');
   board.classList.remove('circle');
@@ -78,6 +82,14 @@ const swipTurn = () => {
   } else {
     board.classList.add('x');
   }
+
+}
+
+const swipTurn = () => {
+  /* isCircleTurn recebe o inverso que ele tinha */
+  isCircleTurn = !isCircleTurn;
+
+  setBoardHoverClass();
 }
 
 const handleClick = (e) => {
@@ -101,3 +113,4 @@ const handleClick = (e) => {
 
 startGame();
 
+restartButton.addEventListener('click', startGame);
